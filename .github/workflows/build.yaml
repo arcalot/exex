@@ -21,49 +21,46 @@ jobs:
           version: v1.55.2
 
   test:
+    name: go test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
           go-version: 1.21.6
-
       - name: Set up gotestfmt
-        uses: gotesttools/gotestfmt-action@v2
+        uses: GoTestTools/gotestfmt-action@v2
+      - uses: actions/cache@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set up limgo
-        uses: GoTestTools/limgo-action@v1.0.1
-        with:
-          version: "v1.0.0"
-          install-only: true
-
-      - name: run tests
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: go-test-${{ hashFiles('**/go.sum') }}
+          restore-keys: go-test-
+      - name: Run go test
         run: |
           set -euo pipefail
-          go test -coverprofile=test.cov -json -v ./... 2>&1 | tee /tmp/gotest.log | gotestfmt
-
-      - name: upload test log
+          go generate
+          go test -coverprofile /tmp/coverage.out -json -v ./... 2>&1 | tee /tmp/gotest.log | gotestfmt
+          echo "# Code coverage summary" > /tmp/coverage.md
+          echo "|File|Type|Coverage|" >> /tmp/coverage.md
+          echo "|----|----|--------|" >> /tmp/coverage.md
+          go tool cover -func /tmp/coverage.out | sed -e 's/\s\s*/|/g' -e 's/^/|/g' -e 's/$/|/g' >> /tmp/coverage.md
+          
+          cat /tmp/coverage.md >> $GITHUB_STEP_SUMMARY
+          echo "::group::Code coverage summary"
+          go tool cover -func /tmp/coverage.out
+          echo "::endgroup::"
+      - name: Upload test log
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-log
-          path: /tmp/gotest.log
+          name: test-results
+          path: |
+            /tmp/gotest.log
+            /tmp/coverage.out
+            /tmp/coverage.md
           if-no-files-found: error
 
-      - name: Calculate test coverage
-        run: |
-          cat .limgo.json
-          limgo -coverfile=test.cov -config=.limgo.json -outfmt=md -outfile=limgo_cov.md
-          cat limgo_cov.md >> $GITHUB_STEP_SUMMARY
-
-      - name: upload coverage results
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage
-          path: limgo_cov.md
-          if-no-files-found: error

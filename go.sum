@@ -1,0 +1,4 @@
+go.arcalot.io/assert v1.7.0 h1:PTLyeisNMUKpM9wXRDxResanBhuGOYO1xFK3v5b3FSw=
+go.arcalot.io/assert v1.7.0/go.mod h1:nNmWPoNUHFyrPkNrD2aASm5yPuAfiWdB/4X7Lw3ykHk=
+go.arcalot.io/log/v2 v2.1.0 h1:lNO931hJ82LgS6WcCFCxpLWXQXPFhOkz6PyAJ/augq4=
+go.arcalot.io/log/v2 v2.1.0/go.mod h1:PNWOSkkPmgS2OMlWTIlB/WqOw0yaBvDYd8ENAP80H4k=

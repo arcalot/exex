@@ -1,6 +1,6 @@
-// exex provides a custom Cmd type that wraps exec.Cmd in a way that
-// it will always capture standard error stream if execution fails
-// with an exec.ExitError.
+// Package exex provides a custom Cmd type that wraps exec.Cmd in a
+// way that it will always capture standard error stream if execution
+// fails with an exec.ExitError.
 //
 // The standard library exec package contains a very useful API to
 // execute commands, however, the exec.Cmd.Run and exec.Cmd.Output
@@ -133,7 +133,7 @@ func (c *Cmd) StdinPipe() (io.WriteCloser, error) { return (*exec.Cmd)(c).StdinP
 // standard output when the command starts.
 func (c *Cmd) StdoutPipe() (io.ReadCloser, error) { return (*exec.Cmd)(c).StdoutPipe() }
 
-// String returns a human-readable description of c
+// String returns a human-readable description of c.
 func (c *Cmd) String() string { return (*exec.Cmd)(c).String() }
 
 // RunCommand wraps an *exec.Cmd into a Cmd and returns the result of
@@ -169,10 +169,10 @@ func CommandError(err error, errMsg string) error {
 	return nil
 }
 
-// Error is a type alias for exec.Error
+// Error is a type alias for exec.Error.
 type Error = exec.Error
 
-// ExitError is a type alias for exec.ExitError
+// ExitError is a type alias for exec.ExitError.
 type ExitError = exec.ExitError
 
 // ErrNotFound is an alias for exec.ErrNotFound, the error resulting

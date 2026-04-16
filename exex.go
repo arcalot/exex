@@ -46,7 +46,7 @@ type Cmd exec.Cmd
 //
 // Refer to the exec.Command documentation for additional information.
 func Command(name string, args ...string) *Cmd {
-	return (*Cmd)(exec.Command(name, args...))
+	return (*Cmd)(exec.Command(name, args...)) //nolint:gosec // Variable args intentional.
 }
 
 // CommandContext is like Command but the Cmd is associated with a
@@ -54,7 +54,7 @@ func Command(name string, args ...string) *Cmd {
 //
 // Refer to the exec.Command documentation for additional information.
 func CommandContext(ctx context.Context, name string, args ...string) *Cmd {
-	return (*Cmd)(exec.CommandContext(ctx, name, args...))
+	return (*Cmd)(exec.CommandContext(ctx, name, args...)) //nolint:gosec // Variable args intentional.
 }
 
 // Run starts the command and waits for it to end.
